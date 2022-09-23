@@ -10,13 +10,15 @@ pub const WIDTH: i32 = 1200;
 pub const CELL_SIZE: i32 = WIDTH / COLUMNS as i32;
 pub const HEIGHT: i32 = ROWS as i32 * CELL_SIZE;
 
+pub const SPECIES_NAME: &str = "heart";
+
 fn main() {
     let (mut rl, thread) = raylib::init()
         .size(WIDTH, HEIGHT)
         .title("Life-Game AI")
         .build();
 
-    let grid = Grid::from(vec![vec![1]]);
+    let grid = Grid::from(SPECIES_NAME);
 
     while !rl.window_should_close() {
         use draw::Drawable;
