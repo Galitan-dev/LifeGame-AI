@@ -130,6 +130,34 @@ impl Grid {
     pub fn iter(&self) -> GridIterator {
         self.into_iter()
     }
+
+    pub fn next(&mut self) {
+        let mut new_cells = [[false; ROWS]; COLUMNS];
+        for cell in self.iter() {
+            let neighbours = self.get_neighbours(cell.x, cell.y);
+            new_cells[cell.x as usize][cell.y as usize] =
+                neighbours > 1 && neighbours < 4 && (cell.alive || neighbours > 2)
+        }
+        self.cells = new_cells;
+    }
+
+    fn get_neighbours(&self, x: i32, y: i32) -> usize {
+        let mut neighbours = 0;
+        for ox in 0..3 {
+            for oy in 0..3 {
+                let nx = x as isize + ox - 1;
+                let ny = y as isize + oy - 1;
+                if (ox != 1 || oy != 1)
+                    && (nx >= 0 && nx < COLUMNS as isize)
+                    && (ny >= 0 && ny < ROWS as isize)
+                    && self.get(nx as usize, ny as usize)
+                {
+                    neighbours += 1
+                }
+            }
+        }
+        neighbours
+    }
 }
 
 impl From<&str> for Grid {
@@ -155,10 +183,9 @@ impl From<&str> for Grid {
             last_char = char;
         }
         if last_char != '\n' {
+            max_columns = current_row.len().max(max_columns);
             cells.push(current_row);
         }
-
-        println!("{cells:?}\n{max_columns}");
 
         let mut cells_by_columns: Vec<Vec<bool>> = Vec::new();
         for x in 0..max_columns {
