@@ -1,7 +1,6 @@
-mod draw;
-mod grid;
+mod game;
 
-use grid::Grid;
+use game::Game;
 use raylib::prelude::*;
 
 pub const COLUMNS: usize = 60;
@@ -19,19 +18,19 @@ fn main() {
         .title("Life-Game AI")
         .build();
 
-    let mut grid = Grid::from(SPECIES_NAME);
+    let mut game = Game::new(SPECIES_NAME);
 
     let mut frame_count = 1;
     while !rl.window_should_close() {
         if frame_count % SLOWNESS == 0 && frame_count > 0 {
-            grid.next();
+            game.update();
         }
 
-        use draw::Drawable;
+        use game::draw::Drawable;
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::BLACK);
-        grid.draw(&mut d);
+        game.draw(&mut d);
         frame_count += 1;
     }
 }

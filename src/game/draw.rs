@@ -1,12 +1,20 @@
 use raylib::prelude::*;
 
-use crate::{
+use crate::{CELL_SIZE, COLUMNS, HEIGHT, ROWS, WIDTH};
+
+use super::{
     grid::{Cell, Grid},
-    CELL_SIZE, COLUMNS, HEIGHT, ROWS, WIDTH,
+    Game,
 };
 
 pub trait Drawable {
     fn draw(&self, d: &mut RaylibDrawHandle);
+}
+
+impl Drawable for Game {
+    fn draw(&self, d: &mut RaylibDrawHandle) {
+        self.grid.draw(d);
+    }
 }
 
 impl Drawable for Grid {

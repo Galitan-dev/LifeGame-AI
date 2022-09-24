@@ -131,14 +131,15 @@ impl Grid {
         self.into_iter()
     }
 
-    pub fn next(&mut self) {
+    pub fn next(&mut self) -> Self {
         let mut new_cells = [[false; ROWS]; COLUMNS];
         for cell in self.iter() {
             let neighbours = self.get_neighbours(cell.x, cell.y);
             new_cells[cell.x as usize][cell.y as usize] =
                 neighbours > 1 && neighbours < 4 && (cell.alive || neighbours > 2)
         }
-        self.cells = new_cells;
+
+        Self { cells: new_cells }
     }
 
     fn get_neighbours(&self, x: i32, y: i32) -> usize {
